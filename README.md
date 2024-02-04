@@ -12,8 +12,7 @@ You can install Yarn via the Homebrew package manager. If you don't have Homebre
 3. Using Yarn In Our Project:
 1) Open your terminal and navigate to your project directory.
 2) Run the following command to install project dependencies:
-yarn
-yarn install
+first input "yarn" and run in your command line. Then input "yarn install".
 
 4. Additional Notes:
 If we want to add new packages or dependencies to the project, we can use:
