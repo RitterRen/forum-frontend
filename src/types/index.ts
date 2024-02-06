@@ -2,15 +2,16 @@ import store from "../store/store";
 import type { Action } from 'redux';
 
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-export type ProductPayload = {
-    id: string;
-    name: string;
-    quantity: number;
-    price: number;
+export type PostPayload = {
+    postId: number,
+    username: string,
+    title: string,
+    date: string,
 };
 
-export type ProductAction = Action<string> & { payload: ProductPayload };
+export type ProductAction = Action<string> & { payload: PostPayload };
 
 export type IPost = {
     username: string,

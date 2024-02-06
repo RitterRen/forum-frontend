@@ -4,19 +4,25 @@ import { Routes, Route } from "react-router-dom";
 import SignUp from './components/SignUp';
 import Home from './components/Home';
 import Contact from './components/Contact';
+import { Provider } from 'react-redux';
+import store from './store/store';
+import NewPost from './components/NewPost';
 
 function App() {
 
   return (
-    <div className="App">
+    // <div className="App">
+    <Provider store={store}>
         <Header/>
         <Routes>
-          <Route path="/signUp" element={<SignUp />} />
-          <Route path="/signIn" element={<SignIn />} />
+          <Route path="/users/register" element={<SignUp />} />
+          <Route path="/users/login" element={<SignIn />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/post" element={<NewPost />} />
+          <Route path="/contactus" element={<Contact />} />
         </Routes>
-    </div>
+    </Provider>
+    // </div>
   );
 }
 

@@ -1,46 +1,38 @@
-import { ListItem, Avatar, ListItemAvatar, ListItemText, IconButton } from '@mui/material'
+import { Card, CardHeader, IconButton } from '@mui/material'
+import { useAppSelector } from '../../store/hooks';
+import { selectPostById } from '../../store/selectors/post.selector';
+import PeopleIcon from '@mui/icons-material/People';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ImageIcon from '@mui/icons-material/Image';
-import { IPost } from '../../types';
 
 
 interface IProps {
-    post: IPost;
+    id: string
 }
 
 
 
-const Posts = (props: IProps) => {
-    const isAdmin = true;
-    const { username, title, date } = props.post;
+const PostCard = (props: IProps) => {
+    const post = useAppSelector(selectPostById(props.id));
     return (
-        // <Box sx={postCardWrapper}>
-        //     <Box sx={postCardLayout}>
-        //         <PostInfoContent post={props.post} />
-        //         <Typography sx={postCardHeader} variant="h6">
-        //         {item.desc}
-        //         </Typography>
-        //         {item.image && <ImageContent image={item.image} />}
-        //     </Box>
-        // </Box>
-        <ListItem
-            secondaryAction={ 
-                isAdmin ?
-                <IconButton edge="end" aria-label="delete">
-                    <DeleteIcon />
-                </IconButton> : 
-                null
-          }
-        >
-            <ListItemAvatar>
-            {/* <p>{username}</p> */}
-            <Avatar>
-                <ImageIcon />
-            </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={title} secondary={date} />
-        </ListItem>
+        <Card sx={{ width: '100%', margin: 1 }}>
+            
+            <CardHeader
+                title={post.username}
+                avatar={<PeopleIcon/>}
+                subheaderTypographyProps={{fontSize: 12, align: 'left'}}
+                subheader={post.date}
+            />
+            <CardHeader 
+                title={post.title} 
+                titleTypographyProps={{ variant:"h6" }}
+                secondaryAction={
+                    <IconButton edge="end" aria-label="delete">
+                        <DeleteIcon />
+                    </IconButton>
+                }
+            />
+        </Card>
     )
 }
 
-export default Posts
+export default PostCard

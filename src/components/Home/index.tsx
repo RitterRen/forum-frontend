@@ -1,29 +1,32 @@
 import { Box, Container } from '@mui/material'
 import { Tabs, TabList, Tab, TabPanel } from '@mui/joy';
 
-import MainContent from './MainContent';
+import PostThread from './PostThread';
 
 
 const Home = () => {
+    const isAdmin = false;
     return (
-        <Container component="main" maxWidth="lg">
-            <Box>
-                <Tabs aria-label="Basic tabs" defaultValue={0} sx={{ mt: 8}}>
+        <Container component="main" maxWidth="md">
+            <Box sx={{ mt: 8}}>
+                {isAdmin ?
+                <Tabs aria-label="Basic tabs" defaultValue={0}>
                     <TabList>
                         <Tab>All</Tab>
                         <Tab>Banned</Tab>
                         <Tab>Deleted</Tab>
                     </TabList>
                     <TabPanel value={0}>
-                        <MainContent />
+                        <PostThread />
                     </TabPanel>
                     <TabPanel value={1}>
-                        <MainContent />
+                        <PostThread />
                     </TabPanel>
                     <TabPanel value={2}>
-                        <MainContent />
+                        <PostThread />
                     </TabPanel>
                 </Tabs>
+                : <PostThread/> }
             </Box>
         </Container>
     )
