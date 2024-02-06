@@ -56,6 +56,14 @@ const headerList = [
         label: "Log In",
         href: "/signIn",
     },
+    {
+        label: "Home",
+        href: "/home",
+    },
+    {
+        label: "Contact Us",
+        href: "/contact",
+    },
 ]
 
 const useStyles = makeStyles(() => ({
