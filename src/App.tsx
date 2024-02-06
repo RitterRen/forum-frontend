@@ -5,6 +5,7 @@ import SignUp from './components/SignUp';
 import Home from './components/Home';
 import Contact from './components/Contact';
 import Copyright from './components/Copyright';
+import RefreshToken from './components/RefreshToken';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/home" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/refreshToken" element={<RefreshToken />} />
         </Routes>
 
         <Copyright sx={{ mt: 5 }} />
