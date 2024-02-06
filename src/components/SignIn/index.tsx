@@ -12,31 +12,44 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { useState } from 'react';
+import API, {STATUS} from '../../apiConfig';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  })
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prevFormData => ({ ...prevFormData, [e.target.name]: e.target.value }));
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    try {
+      console.log(formData);
+      
+      const response = await fetch(API.login, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      if (response.ok && data.code === STATUS.SUCCESS) {
+        localStorage.setItem("token", data.data);
+        window.alert("Login successfully !");
+      } else {
+        window.alert(`Error: ${data.message}`);
+      }
+    } catch (error: any) {
+      window.alert(`Error: ${error.toString()}`)
+    }
   };
 
   return (
@@ -65,6 +78,8 @@ export default function SignIn() {
               id="email"
               label="Email Address"
               name="email"
+              onChange={handleChange}
+              value={formData.email}
               autoComplete="email"
               autoFocus
             />
@@ -73,6 +88,8 @@ export default function SignIn() {
               required
               fullWidth
               name="password"
+              onChange={handleChange}
+              value={formData.password}
               label="Password"
               type="password"
               id="password"
@@ -97,14 +114,13 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/signUp" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );

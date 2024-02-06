@@ -25,8 +25,9 @@ const Home = () => {
                     <TabPanel value={2}>
                         <PostThread />
                     </TabPanel>
-                </Tabs>
-                : <PostThread/> }
+                </Tabs> :
+                <PostThread />
+                }
             </Box>
         </Container>
     )
