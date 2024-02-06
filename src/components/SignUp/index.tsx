@@ -12,31 +12,46 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Forum Web App
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import API from '../../apiConfig';
+import { useState } from 'react';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prevFormData => ({ ...prevFormData, [e.target.name]: e.target.value }));
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    try {
+      console.log(formData);
+      
+      const response = await fetch(API.register, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        window.alert("Registration successfully !");
+      } else {
+        window.alert(`Error: ${data.message}`);
+      }
+    } catch (error: any) {
+      window.alert(`Error: ${error.toString()}`)
+    }
   };
 
   return (
@@ -63,6 +78,8 @@ export default function SignUp() {
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
+                  onChange={handleChange}
+                  value={formData.firstName}
                   required
                   fullWidth
                   id="firstName"
@@ -77,6 +94,8 @@ export default function SignUp() {
                   id="lastName"
                   label="Last Name"
                   name="lastName"
+                  onChange={handleChange}
+                  value={formData.lastName}
                   autoComplete="family-name"
                 />
               </Grid>
@@ -87,6 +106,8 @@ export default function SignUp() {
                   id="email"
                   label="Email Address"
                   name="email"
+                  onChange={handleChange}
+                  value={formData.email}
                   autoComplete="email"
                 />
               </Grid>
@@ -95,6 +116,8 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="password"
+                  onChange={handleChange}
+                  value={formData.password}
                   label="Password"
                   type="password"
                   id="password"
@@ -125,7 +148,6 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
   );
