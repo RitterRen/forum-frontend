@@ -56,6 +56,10 @@ const headerList = [
         label: "Log In",
         href: "/signIn",
     },
+    {
+        label:"PostDetail",
+        href:"/postDetail"
+    }
 ]
 
 const useStyles = makeStyles(() => ({
