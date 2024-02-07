@@ -3,7 +3,7 @@ import { HistoryModel, UserModel } from '../../types';
 import { useState } from 'react'
 import { Typography } from '@mui/material';
 import { showFormattedDate } from '../util';
-import { Grid, Avatar, Button } from '@mui/material';
+import { Grid, Avatar, Button, List, ListItem, ListItemText, Paper } from '@mui/material';
 import { EditUserProfile } from './EditUserProfile/EditUserProfile';
 
 const token = localStorage.getItem("token");
@@ -146,47 +146,57 @@ export const UserProfile = () => {
     );
 
     // Generate list items for view history
-    // const viewHistoryList = (
-    //     <List>
-    //         {user.history.map((historyItem, index) => (
-    //             <ListItem key={index}>
-    //                 <ListItemText primary={historyItem.title} secondary={historyItem.date.toLocaleDateString()} />
-    //             </ListItem>
-    //         ))}
-    //     </List>
-    // );
+    const viewHistoryList = (
+        <List>
+            {history.map((historyItem, index) => (
+                <Paper key={index} elevation={2} sx={{ margin: 1 }}>
+                    <ListItem>
+                        <ListItemText
+                            primary={historyItem.postId}
+                            secondary={showFormattedDate(historyItem.viewDate)}
+                        />
+                    </ListItem>
+                </Paper>
+            ))}
+        </List>
+    );
 
     return (
+
         <Grid sx={{ paddingTop: "2rem" }} container spacing={2}>
             <Grid item xs={5}>
-                <Grid container spacing={1}>
+                <Paper
+                    elevation={2}
+                >
+                    <Grid container spacing={1}>
 
-                    <Grid item xs={12} style={{ backgroundColor: "lightgrey" }}>
-                        <Avatar
-                            src={user.profileImageURL}
-                            sx={{ width: 100, height: 100 }}
-                        />
-                        <Grid>
-                            {userInfoItems}
+                        <Grid item xs={12} style={{ backgroundColor: "lightgrey" }}>
+                            <Avatar
+                                src={user.profileImageURL}
+                                sx={{ width: 100, height: 100 }}
+                            />
+                            <Grid>
+                                {userInfoItems}
+                            </Grid>
+
                         </Grid>
-
+                        <Grid item xs={12}>
+                            <Button
+                                variant="outlined"
+                                onClick={handleOpenEditModal}
+                            >Edit Profile</Button>
+                        </Grid>
+                        <EditUserProfile
+                            open={isEditModalOpen}
+                            onClose={handleCloseEditModal}
+                            user={user}
+                            onSave={handleSaveUser}
+                        />
                     </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            variant="outlined"
-                            onClick={handleOpenEditModal}
-                        >Edit Profile</Button>
-                    </Grid>
-                    <EditUserProfile
-                        open={isEditModalOpen}
-                        onClose={handleCloseEditModal}
-                        user={user}
-                        onSave={handleSaveUser}
-                    />
-                </Grid>
+                </Paper>
             </Grid>
-            <Grid item xs={8}>
-
+            <Grid item xs={7}>
+                {viewHistoryList}
             </Grid>
 
         </Grid>

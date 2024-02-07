@@ -58,6 +58,6 @@ export type UserModel = {
 export type HistoryModel = {
     id: number;
     userId: number;
-    postId: number;
+    postId: string;
     viewDate: string;
 }
