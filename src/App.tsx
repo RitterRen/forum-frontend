@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 import NewPost from './components/NewPost';
 import Copyright from './components/Copyright';
+import PostDetail from './components/PostDetail';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/home" element={<Home />} />
           <Route path="/post" element={<NewPost />} />
+          <Route path="/post/:id" element={<PostDetail />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
 

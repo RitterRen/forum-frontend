@@ -6,9 +6,12 @@ export type AppDispatch = typeof store.dispatch;
 
 export type PostPayload = {
     postId: number,
-    username: string,
+    user: IUser,
     title: string,
-    date: string,
+    content: string,
+    dateCreated: string,
+    dateModified?: string,
+    postReplies: Array<IPostReply>
 };
 
 export type ProductAction = Action<string> & { payload: PostPayload };
@@ -21,28 +24,22 @@ export type IPost = {
 
 
 export type IPostReply = {
-    userId: number,
+    user: IUser,
     comment: string,
     isActive: boolean,
-    dateCreated: Date,
+    dateCreated: string,
     subReplies: Array<ISubReply>
 };
 
 export type ISubReply = {
-    userId: number,
+    user: IUser,
     comment: string,
     isActive: boolean,
-    dateCreated: Date,
+    dateCreated: string,
 };
 
 export type IUser = {
     userId: number, 
-    firstName: string,
-    lastName: string, 
-    email: string, 
-    password: string, 
-    active: boolean,
-    dateJoined: Date, 
-    type: string, 
+    name: string,
     profileImageURL: string
 };
