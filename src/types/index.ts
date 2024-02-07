@@ -39,7 +39,25 @@ export type ISubReply = {
 };
 
 export type IUser = {
-    userId: number, 
+    userId: number,
     name: string,
     profileImageURL: string
 };
+
+export type UserModel = {
+    userId: number;
+    email: string,
+    firstName: string;
+    lastName: string;
+    dateJoined: string;
+    active: boolean;
+    role: string;
+    profileImageURL: string;
+}
+
+export type HistoryModel = {
+    id: number;
+    userId: number;
+    postId: string;
+    viewDate: string;
+}
