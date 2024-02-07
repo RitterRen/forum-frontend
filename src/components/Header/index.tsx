@@ -50,11 +50,11 @@ export default function Header() {
 const headerList = [
     {
         label: "Register",
-        href: "/signUp",
+        href: "/users/register",
     },
     {
         label: "Log In",
-        href: "/signIn",
+        href: "/users/login",
     },
     {
         label: "Home",
@@ -62,7 +62,7 @@ const headerList = [
     },
     {
         label: "Contact Us",
-        href: "/contact",
+        href: "/contactus",
     },
 ]
 
