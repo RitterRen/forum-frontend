@@ -2,15 +2,19 @@ import store from "../store/store";
 import type { Action } from 'redux';
 
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-export type ProductPayload = {
-    id: string;
-    name: string;
-    quantity: number;
-    price: number;
+export type PostPayload = {
+    postId: number,
+    user: IUser,
+    title: string,
+    content: string,
+    dateCreated: string,
+    dateModified?: string,
+    postReplies: Array<IPostReply>
 };
 
-export type ProductAction = Action<string> & { payload: ProductPayload };
+export type ProductAction = Action<string> & { payload: PostPayload };
 
 export type IPost = {
     username: string,
@@ -20,28 +24,22 @@ export type IPost = {
 
 
 export type IPostReply = {
-    userId: number,
+    user: IUser,
     comment: string,
     isActive: boolean,
-    dateCreated: Date,
+    dateCreated: string,
     subReplies: Array<ISubReply>
 };
 
 export type ISubReply = {
-    userId: number,
+    user: IUser,
     comment: string,
     isActive: boolean,
-    dateCreated: Date,
+    dateCreated: string,
 };
 
 export type IUser = {
     userId: number, 
-    firstName: string,
-    lastName: string, 
-    email: string, 
-    password: string, 
-    active: boolean,
-    dateJoined: Date, 
-    type: string, 
+    name: string,
     profileImageURL: string
 };
