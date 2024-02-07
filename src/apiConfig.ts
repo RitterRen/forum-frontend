@@ -8,6 +8,8 @@ const API = {
     getUserInfo: "http://localhost:8888/api/user",
 
     getAllUsers: "http://localhost:8888/api/user/all",
+
+    refreshToken: "http://localhost:8888/api/auth/refreshtoken"
 };
 
 export const STATUS = {

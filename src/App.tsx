@@ -9,6 +9,7 @@ import store from './store/store';
 import NewPost from './components/NewPost';
 import Copyright from './components/Copyright';
 import PostDetail from './components/PostDetail';
+import RefreshToken from './components/RefreshToken';
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/post" element={<NewPost />} />
           <Route path="/post/:id" element={<PostDetail />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/refreshToken" element={<RefreshToken />} />
         </Routes>
 
         <Copyright sx={{ mt: 5 }} />
