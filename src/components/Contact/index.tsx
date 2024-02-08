@@ -1,11 +1,10 @@
+import React, { ChangeEvent, SyntheticEvent, useState } from 'react'
 import { Textarea } from '@mui/joy'
 import { Box, Button, Container, TextField, Dialog, DialogActions, DialogContent, DialogTitle, TextareaAutosize } from '@mui/material'
-import React, { ChangeEvent, SyntheticEvent, useState } from 'react'
 import { ContactModel } from '../../types'
 
-const token = localStorage.getItem("token")
-
 const Contact = () => {
+    const token = localStorage.getItem("token")
 
     const [form, setForm] = useState<ContactModel>({
         Subject: '',

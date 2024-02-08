@@ -1,11 +1,11 @@
 import React from 'react'
-import { Toolbar, AppBar, Typography, Button } from '@mui/material'
+import { Toolbar, AppBar, Typography, Button, IconButton } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { Link as RouterLink } from 'react-router-dom'
 
 export default function Header() {
-  const { logo, menuButton, toolbar, appbar, header } = useStyles();
-
+  const {logo, menuButton, toolbar, appbar, header} = useStyles();
+  
   const displayDesktop = () => {
     return (
       <Toolbar className={toolbar}>
