@@ -9,7 +9,11 @@ const API = {
 
     getAllUsers: "http://localhost:8888/api/user/all",
 
-    refreshToken: "http://localhost:8888/api/auth/refreshtoken"
+    refreshToken: "http://localhost:8888/api/auth/refreshtoken",
+
+    getAllMessages: "http://localhost:8888/api/message/all",
+
+    toggleMessageStatus: (messageId: Number) => `http://localhost:8888/api/message/${messageId}/toggle`,
 };
 
 export const STATUS = {
