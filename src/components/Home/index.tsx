@@ -26,7 +26,7 @@ const Home = () => {
     return (
         <Container component="main" maxWidth="md">
             <Box sx={{ mt: 8}}>
-                <h2>User Home Page</h2>
+                {isAdmin ? <h2>Admin Home Page</h2> : <h2>User Home Page</h2>}
                 {isAdmin ?
                 <Tabs aria-label="Basic tabs" defaultValue={0}>
                     <TabList>
