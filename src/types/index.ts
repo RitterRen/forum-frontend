@@ -61,3 +61,9 @@ export type HistoryModel = {
     postId: string;
     viewDate: string;
 }
+
+export type ContactModel = {
+    Subject: string,
+    email: string,
+    message: string
+}
