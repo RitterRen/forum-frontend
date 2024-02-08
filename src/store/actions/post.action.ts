@@ -186,3 +186,19 @@ export const hidePost = (id: string) => (dispatch: AppDispatch) => {
         }
     });
 }
+
+export const createHistory = (userId: number, postId: string) => (dispatch: AppDispatch) => {
+    
+    return apiRequest("http://localhost:8888/api/history", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({userId: userId, postId: postId})
+    })!
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        
+    });
+}

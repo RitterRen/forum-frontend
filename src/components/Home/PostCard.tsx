@@ -7,6 +7,7 @@ import { selectUser } from '../../store/selectors/user.selector';
 import MenuButtons from './MenuButtons';
 import { ROLE_ADMIN, ROLE_SUPER } from '../../constants';
 import { selectPostById } from '../../store/selectors/post.selector';
+import { createHistory } from '../../store/actions/post.action';
 
 
 interface IProps {
@@ -21,11 +22,14 @@ const PostCard = (props: IProps) => {
     const isAdmin = user.role === ROLE_ADMIN || user.role === ROLE_SUPER;
     const post = useAppSelector(selectPostById(props.id));
     const navigate = useNavigate(); 
-  
+    const dispatch = useThunkDispatch();
 
     return (
         <Card sx={{ width: '100%', margin: 1 }}>
-            <CardActionArea onClick={() => navigate(`/post/${props.id}`)} >
+            <CardActionArea onClick={() => {
+                dispatch(createHistory(user.userId, props.id));
+                navigate(`/post/${props.id}`);
+            }} >
             <CardHeader
                 title={`${post.user.firstName} ${post.user.lastName}`}
                 avatar={<PeopleIcon/>}
