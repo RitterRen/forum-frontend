@@ -76,7 +76,6 @@ const Contact = () => {
                     autoFocus
                 />
                 <TextareaAutosize
-
                     id="message"
                     style={{ width: '100%', marginTop: '16px' }}
                     minRows={6}

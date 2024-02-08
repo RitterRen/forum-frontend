@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent } from 'react';
-import { Grid, Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { UserModel } from '../../../types';
 
 interface EditUserProfileProps {
@@ -18,7 +18,9 @@ export const EditUserProfile: React.FC<EditUserProfileProps> = ({ open, onClose,
         const { name, value } = event.target;
         setEditedUser(prevState => ({ ...prevState, [name]: value }));
     };
-    const handleSave = () => {
+
+
+    const handleSave = async () => {
         onSave(editedUser);
         onClose(); // Close modal after saving
     };
@@ -27,28 +29,6 @@ export const EditUserProfile: React.FC<EditUserProfileProps> = ({ open, onClose,
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Edit Profile</DialogTitle>
             <DialogContent>
-                <TextField
-                    margin="dense"
-                    label="First Name"
-                    type="text"
-                    fullWidth
-                    variant="outlined"
-                    name="firstName"
-                    value={editedUser.firstName}
-                    onChange={handleChange}
-                    placeholder={user.firstName}
-                />
-                <TextField
-                    margin="dense"
-                    label="Last Name"
-                    type="text"
-                    fullWidth
-                    variant="outlined"
-                    name="lastName"
-                    value={editedUser.lastName}
-                    onChange={handleChange}
-                    placeholder={user.lastName}
-                />
                 <TextField
                     margin="dense"
                     label="Email"
@@ -60,7 +40,6 @@ export const EditUserProfile: React.FC<EditUserProfileProps> = ({ open, onClose,
                     onChange={handleChange}
                     placeholder={user.email}
                 />
-                {/* Add more fields as needed */}
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
