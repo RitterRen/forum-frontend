@@ -41,6 +41,9 @@ export type IRequest = {
     message: string, 
 }
 
+
+export type ProductAction = Action<string> & { payload: PostPayload };
+
 export type IPost = {
     username: string,
     title: string,
@@ -74,3 +77,27 @@ export type IUser = {
     role: string,
     profileImageURL?: string
 };
+
+export type UserModel = {
+    userId: number;
+    email: string,
+    firstName: string;
+    lastName: string;
+    dateJoined: string;
+    active: boolean;
+    role: string;
+    profileImageURL: string;
+}
+
+export type HistoryModel = {
+    id: number;
+    userId: number;
+    postId: string;
+    viewDate: string;
+}
+
+export type ContactModel = {
+    Subject: string,
+    email: string,
+    message: string
+}

@@ -11,6 +11,8 @@ import Copyright from './components/Copyright';
 import PostDetail from './components/PostDetail';
 import RefreshToken from './components/RefreshToken';
 import EditPost from './components/EditPost';
+import MessageManagement from './components/MessageManagement';
+import { UserProfile } from './components/UserDetail';
 
 function App() {
 
@@ -27,12 +29,14 @@ function App() {
           <Route path="/post/:id" element={<PostDetail />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/refreshToken" element={<RefreshToken />} />
+          <Route path="/messageManagement" element={<MessageManagement/>}/>
+          <Route path="/user" element={<UserProfile />} />
           <Route path="/edit/:id" element={<EditPost />} />
         </Routes>
 
-        <Copyright sx={{ mt: 5 }} />
-    </Provider>
-  );
+          <Copyright sx={{ mt: 5 }} />
+        </Provider>
+    );
 }
 
 export default App;

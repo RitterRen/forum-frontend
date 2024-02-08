@@ -3,13 +3,9 @@ import ArrowDropDown from '@mui/icons-material/ArrowDropDown'
 import { Dropdown, Button, Menu, MenuButton } from '@mui/joy'
 import { Box, Grid, MenuItem } from '@mui/material'
 import PostCard from './PostCard'
-import { selectBannedPostIds, selectDeletedPostIds, selectPostIds, selectPublishedPostIds } from '../../store/selectors/post.selector'
-import { useAppSelector, useThunkDispatch } from '../../store/hooks'
+import { useAppSelector } from '../../store/hooks'
 import { Link } from 'react-router-dom'
-import { useEffect } from 'react'
-import { loadPosts } from '../../store/actions/post.action'
-import { BANNED, DELETED, PUBLISHED } from '../../constants'
-import { TypedUseSelectorHook } from 'react-redux'
+
 import { RootState } from '../../types'
 
 const PostThread = ({type, selector}: {type:string, selector: (state: RootState) => string[]}) => {

@@ -22,6 +22,7 @@ const postReducer: Reducer<IPostState, PostAction> = function (
         case LOAD_POST: {
             let newState = { ...prevState };
             let posts = payload as PostPayload[];
+            console.log(posts);
             posts.forEach(post => {
                 newState[post.postId] = post;
             });
