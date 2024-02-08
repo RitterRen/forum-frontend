@@ -11,6 +11,7 @@ import Copyright from './components/Copyright';
 import PostDetail from './components/PostDetail';
 import RefreshToken from './components/RefreshToken';
 import MessageManagement from './components/MessageManagement';
+import { UserProfile } from './components/UserDetail';
 
 function App() {
 
@@ -28,11 +29,12 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/refreshToken" element={<RefreshToken />} />
           <Route path="/messageManagement" element={<MessageManagement/>}/>
+          <Route path="/user" element={<UserProfile />} />
         </Routes>
 
-        <Copyright sx={{ mt: 5 }} />
-    </Provider>
-  );
+          <Copyright sx={{ mt: 5 }} />
+        </Provider>
+    );
 }
 
 export default App;
