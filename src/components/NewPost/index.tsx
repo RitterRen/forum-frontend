@@ -52,6 +52,8 @@ const NewPost = () => {
         
         await Promise.all(uploads)
         await dispatch(createPost({...postContent, status: POST_UNPUBLISHED}));
+
+        navigate(-1);
     }
 
     const uploadFile = async (formData: FormData, type: number) => {
@@ -95,7 +97,7 @@ const NewPost = () => {
         await Promise.all(uploads)
         await dispatch(createPost({...postContent, status: POST_PUBLISHED}));
 
-        navigate('/home');
+        navigate(-1);
     }
     
     const addFile = (e: React.ChangeEvent<HTMLInputElement>) => {

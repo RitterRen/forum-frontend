@@ -4,6 +4,7 @@ export const SORT_POST_BY_DATE: string = 'SORT_POST_BY_DATE';
 export const UPDATE_USER: string = 'UPDATE_USER';
 
 export const LOAD_POST: string = 'LOAD_POST';
+export const ADD_POST: string = 'ADD_POST';
 export const UPDATE_POST: string = 'UPDATE_POST';
 export const UPDATE_REPLY: string = 'UPDATE_REPLY';
 export const UPDATE_SUBREPLY: string = 'UPDATE_SUBREPLY';

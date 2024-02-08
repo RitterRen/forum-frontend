@@ -1,7 +1,7 @@
 import API, { STATUS, apiRequest } from "../../apiConfig";
 import { EditPostContent } from "../../components/EditPost";
 import { PostContent } from "../../components/NewPost";
-import { ALL, BANNED, BAN_POST, DELETED, DELETE_POST, ERROR, HIDE_POST, LOAD_POST, RECOVER_POST, SUCCESS, UPDATE_POST, UPDATE_REPLY, UPDATE_SUBREPLY } from "../../constants";
+import { ADD_POST, ALL, BANNED, BAN_POST, DELETED, DELETE_POST, ERROR, HIDE_POST, LOAD_POST, RECOVER_POST, SUCCESS, UPDATE_POST, UPDATE_REPLY, UPDATE_SUBREPLY } from "../../constants";
 import { AppDispatch, IUser } from "../../types";
 import { selectUser } from "../selectors/user.selector";
 import { createAction } from "../store";
@@ -84,7 +84,7 @@ export const createPost = (postContent: PostContent) => (dispatch: AppDispatch) 
     .then(data => {
         console.log(data);
         if (data.code === STATUS.SUCCESS) {
-            dispatch(createAction(LOAD_POST, data.data));
+            dispatch(createAction(ADD_POST, data.data));
         } else {
             dispatch(createAction(ERROR, data.info));
         }
@@ -184,5 +184,21 @@ export const hidePost = (id: string) => (dispatch: AppDispatch) => {
         } else {
             dispatch(createAction(ERROR, data.info));
         }
+    });
+}
+
+export const createHistory = (userId: number, postId: string) => (dispatch: AppDispatch) => {
+    
+    return apiRequest("http://localhost:8888/api/history", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({userId: userId, postId: postId})
+    })!
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        
     });
 }
