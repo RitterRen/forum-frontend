@@ -20,14 +20,16 @@ import { loginUser } from '../../store/actions/user.action';
 import { selectRequest } from '../../store/selectors/user.selector';
 import { useNavigate } from 'react-router-dom';
 import { loadPosts } from '../../store/actions/post.action';
+import Home from '../Home';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+export default function SignIn(props: {setSelectedComponent?: React.Dispatch<React.SetStateAction<JSX.Element>>}) {
   const dispatch = useThunkDispatch();
   const request = useAppSelector(selectRequest);
   const navigate = useNavigate();
+  const {setSelectedComponent} = props;
     
   const [formData, setFormData] = useState<LoginPayload>({
     email: "",
@@ -42,32 +44,14 @@ export default function SignIn() {
     dispatch(loginUser(formData))
     .then(() => {
         if (request.success) {
-            navigate("/home");
+            if (setSelectedComponent) {
+              setSelectedComponent(<Home />);
+            }
+            navigate("/dashboard");
         } else {
             window.alert(`Error: ${request.message}`);
         }
     });
-    // try {
-    //   console.log(formData);
-      
-    //   const response = await fetch(API.login, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify(formData),
-    //   });
-
-    //   const data = await response.json();
-    //   if (response.ok && data.code === STATUS.SUCCESS) {
-    //     localStorage.setItem("token", data.data);
-    //     window.alert("Login successfully !");
-    //   } else {
-    //     window.alert(`Error: ${data.message}`);
-    //   }
-    // } catch (error: any) {
-    //   window.alert(`Error: ${error.toString()}`)
-    // }
   };
 
   return (

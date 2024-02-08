@@ -94,7 +94,7 @@ export default function Dashboard() {
     const { isAuthorized, role } = useAuthorization();
 
     const headers = isAuthorized ? [{ label: `Current Role: ${role}`, component: <></> }, { label: "Log Out", component: <></> }] : [
-        { label: "Log In", component: <SignIn /> },
+        { label: "Log In", component: <SignIn setSelectedComponent={setSelectedComponent}/> },
         { label: "Register", component: <SignUp /> },
     ]
 

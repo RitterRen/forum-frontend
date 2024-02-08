@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 const useAuthorization = () => {
     const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
     const [role, setRole] = useState("");
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
         if (!token) {
             setIsAuthorized(false);
             return;
@@ -28,7 +28,7 @@ const useAuthorization = () => {
         }
     }, []);
 
-    return { isAuthorized, role };
+    return { isAuthorized, role, token };
 };
 
 export default useAuthorization;
