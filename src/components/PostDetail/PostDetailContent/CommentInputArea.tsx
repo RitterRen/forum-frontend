@@ -1,23 +1,38 @@
 import { Box, Button, TextField } from '@mui/material';
 import React, { useState } from 'react'
-import { inlineWrapper } from '../../styles';
+import { inlineWrapper } from '../../../styles';
+import { useAppSelector, useThunkDispatch } from '../../../store/hooks';
+import { replyPost } from '../../../store/actions/post.action';
+import { selectUser } from '../../../store/selectors/user.selector';
+import { selectPostById } from '../../../store/selectors/post.selector';
 
-const CommentInputArea = () => {
+const CommentInputArea = ({id, replyUserId, type}: {id:string, replyUserId: number, type: number}) => {
     const [commentContent, setCommentContent] = useState("");
+    const user = useAppSelector(selectUser);
+    const post = useAppSelector(selectPostById(id));
+
+    const dispatch = useThunkDispatch();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCommentContent(e.target.value)
     }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        console.log("hifds")
+    const handleReply = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const payload = {
+            id: id,
+            comment: commentContent,
+            user: user,
+            type: type,
+            userId: replyUserId
+        }
+        dispatch(replyPost(payload));
         setCommentContent("");
     };
 
 
     return (
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={inlineWrapper}>
+        <Box component="form" onSubmit={handleReply} noValidate sx={inlineWrapper}>
             <TextField
                 margin="normal"
                 sx={{width: '85%'}}

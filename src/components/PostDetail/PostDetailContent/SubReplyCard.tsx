@@ -1,5 +1,5 @@
 import React from 'react'
-import { ISubReply } from '../../types'
+import { ISubReply } from '../../../types'
 import { Avatar, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
 
 const SubReplyCard = ({subReply}: {subReply: ISubReply}) => {

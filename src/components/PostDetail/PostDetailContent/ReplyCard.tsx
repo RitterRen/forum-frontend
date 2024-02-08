@@ -1,27 +1,47 @@
 import React, { useState } from 'react'
-import { IPostReply } from '../../types'
-import { Divider, ListItem, ListItemAvatar, Avatar, ListItemText, Typography, IconButton, Collapse, List } from '@mui/material'
+import { IPostReply } from '../../../types'
+import { Divider, ListItem, ListItemAvatar, Avatar, ListItemText, Typography, IconButton, Collapse, List, Box } from '@mui/material'
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import KeyboardArrowUpIcon from  "@mui/icons-material/KeyboardArrowUp"; 
 import SubReplyCard from './SubReplyCard';
 import CommentInputArea from './CommentInputArea';
+import { inlineWrapper } from '../../../styles';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useAppSelector, useThunkDispatch } from '../../../store/hooks';
+import { selectPostById } from '../../../store/selectors/post.selector';
+import { POST_PUBLISHED } from '../../../constants';
 
 
-const ReplyCard = ({reply}: {reply: IPostReply}) => {
+const ReplyCard = ({reply, postId}: {reply: IPostReply, postId: string}) => {
     const [open, setOpen] = useState(false); 
+    const dispatch = useThunkDispatch();
+    const post = useAppSelector(selectPostById(postId));
+
+    const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
+        // dispatch(deleteReply())
+    }   
+
     return (
     <>
         <ListItem 
             alignItems="flex-start"
             secondaryAction={
-                <IconButton 
-                    edge="end" 
-                    aria-label="comments" 
-                    onClick={() => setOpen(!open)} 
-                >
-                    {open? <KeyboardArrowUpIcon/>
-                        : <ChatBubbleOutlineOutlinedIcon />}
-                </IconButton>
+                <Box sx={inlineWrapper}>
+                    <IconButton 
+                        edge="end" 
+                        aria-label="comments" 
+                        onClick={() => setOpen(!open)} 
+                    >
+                        {open? <KeyboardArrowUpIcon/>
+                            : <ChatBubbleOutlineOutlinedIcon />}
+                    </IconButton>
+                    <IconButton 
+                        aria-label="delete"
+                        onClick={handleDelete}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                </Box>
             }
         >
             <ListItemAvatar>
@@ -36,7 +56,7 @@ const ReplyCard = ({reply}: {reply: IPostReply}) => {
                     variant="body1"
                     color="text.primary"
                 >
-                    {reply.user.name}
+                    {`${reply.user.firstName} ${reply.user.lastName}`}
                 </Typography>
                 <Typography 
                     sx={{ ml: 2 }} 
@@ -60,7 +80,7 @@ const ReplyCard = ({reply}: {reply: IPostReply}) => {
                                 />
                             )}
                         </List>
-                        <CommentInputArea />
+                        { post.status === POST_PUBLISHED ? <CommentInputArea id={postId} replyUserId={reply.user.userId} type={1}/>: null}
                     </Collapse>
                 </React.Fragment>
                 

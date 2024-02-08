@@ -1,20 +1,45 @@
 import store from "../store/store";
-import type { Action } from 'redux';
+import type { Action, AnyAction } from 'redux';
+import type { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
+// Generics default type for ReturnType
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  AnyAction
+>;
+export type AppThunkDispatch = ThunkDispatch<RootState, unknown, AnyAction>;
+
+export type PostAction = Action<string> & { payload: any };
+export type UserAction = Action<string> & { payload: IUser | string};
+
 export type PostPayload = {
-    postId: number,
+    postId: string,
     user: IUser,
     title: string,
     content: string,
+    status: string,
+    images: string[],
+    attachments: string[],
     dateCreated: string,
     dateModified?: string,
-    postReplies: Array<IPostReply>
+    archived: boolean,
+    postReplies: IPostReply[]
 };
 
-export type ProductAction = Action<string> & { payload: PostPayload };
+export type LoginPayload = {
+    email: string,
+    password: string
+}
+
+export type IRequest = {
+    success: boolean, 
+    message: string, 
+}
 
 export type IPost = {
     username: string,
@@ -40,6 +65,12 @@ export type ISubReply = {
 
 export type IUser = {
     userId: number, 
-    name: string,
-    profileImageURL: string
+    name?: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    active: boolean,
+    dateJoined: string,
+    role: string,
+    profileImageURL?: string
 };

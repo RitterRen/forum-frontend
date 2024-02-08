@@ -5,45 +5,111 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { inlineWrapper } from '../../styles';
+import { useThunkDispatch } from '../../store/hooks';
+import { createPost } from '../../store/actions/post.action';
+import { STATUS, apiRequest } from '../../apiConfig';
+import { POST_PUBLISHED, POST_UNPUBLISHED, SUCCESS } from '../../constants';
 
+export interface PostContent {
+    title: string,
+    content: string,
+    attachments: string[],
+    images: string[],
+    status: string
+}
 const NewPost = () => {
     const [files, setFiles] = useState<File[]>([]);
     const [images, setImages] = useState<File[]>([]);
-    const [postContent, setPostContent] = useState({
+    const dispatch = useThunkDispatch();
+    const navigate = useNavigate();
+    const [postContent, setPostContent] = useState<PostContent>({
         title: "",
         content: "",
+        attachments: [],
+        images:[],
+        status: ""
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPostContent(prevPostContent => ({ ...prevPostContent, [e.target.name]: e.target.value }))
     }
 
-    const handleSave = () => {
-        console.log(postContent);
-        // const formData = new FormData();
-        // files.forEach((file) => formData.append('attachments', file));
-        // images.forEach((image) => formData.append('images', image));
+    const handleSave = async () => {
+        let uploads = [];
+
+        for (const file of files) {
+            const formData = new FormData();
+            formData.append('file', file);
+            uploads.push(uploadFile(formData, 0));
+        }
+        for (const image of images) {
+            const formData = new FormData();
+            formData.append('file', image);
+            uploads.push(uploadFile(formData, 1));
+        }
+        
+        await Promise.all(uploads)
+        await dispatch(createPost({...postContent, status: POST_UNPUBLISHED}));
     }
 
-    const handlePublish = () => {
-        const formData = new FormData();
-        files.forEach((file) => formData.append('attachments', file));
-        images.forEach((image) => formData.append('images', image));
-        
-        fetch("http://localhost:8888/api/auth/register", {})
-        .then( res => res.json())
-        .then( res=> {
-            
+    const uploadFile = async (formData: FormData, type: number) => {
+        let resp = await apiRequest("http://localhost:8888/api/file/upload", {
+            method: "POST",
+            body: formData
         });
+        let data = await resp?.json();
+        const filename = data.data.split(" ")[2];
+        console.log(`Done with ${filename}`);
+        if (type == 0) {
+            let newFiles = [...postContent.attachments];
+            newFiles.push(filename)
+            setPostContent({...postContent,attachments: newFiles })
+        } else {
+            let newImgaes = [...postContent.images];
+            newImgaes.push(filename)
+            setPostContent({...postContent,images: newImgaes })
+        }
+        return data;
+    }
+
+    const handlePublish = async () => {
+        if (postContent.title === "" || postContent.content === "") {
+            window.alert("Cannot create blank post");
+            return;
+        }
+        let uploads = [];
+
+        for (const file of files) {
+            const formData = new FormData();
+            formData.append('file', file);
+            uploads.push(uploadFile(formData, 0));
+        }
+        for (const image of images) {
+            const formData = new FormData();
+            formData.append('file', image);
+            uploads.push(uploadFile(formData, 1));
+        }
+        
+        await Promise.all(uploads)
+        await dispatch(createPost({...postContent, status: POST_PUBLISHED}));
+
+        navigate('/home');
     }
     
-    const addFile = (e: React.ChangeEvent<HTMLInputElement>, setter: Dispatch<File[]>) => {
+    const addFile = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newFiles = [...files];
         const chosenFiles = Array.prototype.slice.call(e.target.files);
         chosenFiles.forEach( (f) => newFiles.push(f));
-        setter(newFiles);
+        setFiles(newFiles);
+    }
+
+    const addImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newFiles = [...images];
+        const chosenFiles = Array.prototype.slice.call(e.target.files);
+        chosenFiles.forEach( (f) => newFiles.push(f));
+        setImages(newFiles);
     }
 
     return (
@@ -98,7 +164,7 @@ const NewPost = () => {
                         style={{display: "none"}} 
                         id="icon-button-file" 
                         type="file" 
-                        onChange={(e) => addFile(e, setFiles)} 
+                        onChange={addFile} 
                     />
                     <IconButton
                         aria-label="upload file"
@@ -113,7 +179,7 @@ const NewPost = () => {
                         accept="image/*" 
                         id="icon-button-image" 
                         type="file" 
-                        onChange={(e) => addFile(e, setImages)}
+                        onChange={addImage}
                     />
                     <IconButton 
                         aria-label="Add image"

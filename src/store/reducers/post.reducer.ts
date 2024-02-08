@@ -1,122 +1,17 @@
 import { Reducer } from 'redux';
-import { SORT_POST_BY_DATE, SORT_POST_BY_REPLY } from '../../constants';
-import { PostPayload, ProductAction } from '../../types';
+import { BAN_POST, DELETE_POST, HIDE_POST, LOAD_POST, POST_BANNED, POST_DELETED, POST_HIDDEN, POST_PUBLISHED, RECOVER_POST, SORT_POST_BY_DATE, SORT_POST_BY_REPLY, UPDATE_POST, UPDATE_REPLY, UPDATE_SUBREPLY } from '../../constants';
+import { PostAction, PostPayload } from '../../types';
 
 interface IPostState {
     [id: string]: PostPayload;
 }
 
-function replyCompare( a: PostPayload, b: PostPayload) {
-    return a.postReplies.length - b.postReplies.length;
-}
-
 const initialState: IPostState = {
-    1: {
-        postId: 1,
-        user: {
-            userId: 1, 
-            name: 'John',
-            profileImageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'
-        },
-        title: "First Post",
-        content: 'This is a new Post',
-        dateCreated: "2024-02-04T13:00:00Z",
-        postReplies: [
-            {
-                user: {
-                    userId: 1, 
-                    name: 'John',
-                    profileImageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'
-                },
-                "comment": "Great post!",
-                "isActive": true,
-                "dateCreated": "2024-02-04T13:45:00Z",
-                "subReplies": [
-                  {
-                    user: {
-                        userId: 1, 
-                        name: 'John',
-                        profileImageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'
-                    },
-                    "comment": "Agreed!",
-                    "isActive": true,
-                    "dateCreated": "2024-02-04T14:00:00Z"
-                  },
-                  {
-                    user: {
-                        userId: 2, 
-                        name: 'Jack',
-                        profileImageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'
-                    },
-                    "comment": "Interesting point!",
-                    "isActive": false,
-                    "dateCreated": "2024-02-04T14:30:00Z"
-                  }
-                ]
-              },
-              {
-                user: {
-                    userId: 3, 
-                    name: 'Nick',
-                    profileImageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'
-                },
-                "comment": "Well written!",
-                "isActive": true,
-                "dateCreated": "2024-02-05T10:15:00Z",
-                "subReplies": [
-                  {
-                    user: {
-                        userId: 1, 
-                        name: 'John',
-                        profileImageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'
-                    },
-                    "comment": "I appreciate that!",
-                    "isActive": true,
-                    "dateCreated": "2024-02-05T10:30:00Z"
-                  }
-                ]
-              },
-              {
-                user: {
-                    userId: 4, 
-                    name: 'Will',
-                    profileImageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'
-                },
-                "comment": "Nice insights!",
-                "isActive": false,
-                "dateCreated": "2024-02-06T11:30:00Z",
-                "subReplies": []
-              }
-        ]
-    },
-    2: {
-        postId: 2,
-        user: {
-            userId: 1, 
-            name: 'John',
-            profileImageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'
-        },
-        title: "Hello World",
-        content: 'This is a new Post',
-        dateCreated: "2024-02-04T14:15:00Z",
-        dateModified: "2024-02-04T14:15:00Z",
-        postReplies: []
-      },
-    3: {
-        postId: 3,
-        user: {
-            userId: 1, 
-            name: 'John',
-            profileImageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png'
-        },
-        title: "Coding Adventures",
-        content: 'This is a new Post',
-        dateCreated: "2024-02-04T15:30:00Z",
-        postReplies: []
-      }
+    
+    
 };
 
-const postReducer: Reducer<IPostState, ProductAction> = function (
+const postReducer: Reducer<IPostState, PostAction> = function (
     prevState = initialState,
     action,
 ) {
@@ -124,18 +19,65 @@ const postReducer: Reducer<IPostState, ProductAction> = function (
     Object.freeze(prevState); // prevents us from accidentally mutating state
 
     switch (type) {
-        case SORT_POST_BY_REPLY: {
+        case LOAD_POST: {
             let newState = { ...prevState };
-            // newState.sort(replyCompare);
-            return newState;
-        }
-        
-        case SORT_POST_BY_DATE: {
-            let newState = { ...prevState };
-            // newState.sort(replyCompare);
+            let posts = payload as PostPayload[];
+            posts.forEach(post => {
+                newState[post.postId] = post;
+            });
             return newState;
         }
 
+        case UPDATE_POST: {
+            let newState = { ...prevState };
+            newState[payload.payload.id] = {...payload.data, user: payload.payload.user};
+            return newState;
+        }
+        
+        case UPDATE_REPLY: {
+            let newState = { ...prevState };
+            let postReplies = newState[payload.id].postReplies
+            newState[payload.id] = {...newState[payload.id], postReplies: [...postReplies, payload]}
+            return newState;
+        }
+
+        case UPDATE_SUBREPLY: {
+            let newState = { ...prevState };
+            let replyUserId = payload.replyUserId;
+            delete payload.replyUserId
+            for (let i = 0; i < newState[payload.id].postReplies.length; i++) {
+                if (newState[payload.id].postReplies[i].user.userId == replyUserId) {
+                    newState[payload.id].postReplies[i].subReplies.push(payload);
+                }
+            }
+            return newState;
+        }
+
+        case BAN_POST: {
+            console.log(payload);
+            let newState = { ...prevState };
+            newState[payload] = {...newState[payload], status: POST_BANNED };
+            return newState;
+        }
+        
+        case RECOVER_POST: {
+            console.log(payload);
+            let newState = { ...prevState };
+            newState[payload] = {...newState[payload], status: POST_PUBLISHED };
+            return newState;
+        }
+
+        case HIDE_POST: {
+            let newState = { ...prevState };
+            newState[payload] = {...newState[payload], status: POST_HIDDEN };
+            return newState;
+        }
+
+        case DELETE_POST: {
+            let newState = { ...prevState };
+            newState[payload] = {...newState[payload], status: POST_DELETED };
+            return newState;
+        }
         default:
             return prevState;
     }

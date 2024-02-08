@@ -1,13 +1,10 @@
 import { Box, CircularProgressTypeMap, List } from '@mui/joy'
-import React from 'react'
-import { PostPayload } from '../../types'
-import { useAppSelector } from '../../store/hooks'
-import { selectPostById } from '../../store/selectors/post.selector'
+import React, { useEffect } from 'react'
+import { IPostReply, PostPayload } from '../../../types'
+import { useAppSelector } from '../../../store/hooks'
+import { selectPost, selectPostById } from '../../../store/selectors/post.selector'
 import ReplyCard from './ReplyCard'
 
-interface IProps {
-    id: string
-}
 
 const ReplyList = ( {id}: {id:string} ) => {
     const post = useAppSelector(selectPostById(id));
@@ -15,10 +12,11 @@ const ReplyList = ( {id}: {id:string} ) => {
     return (
         <Box>
             <List>
-            {post.postReplies.map( (reply, i) => 
+            {post.postReplies.map( (reply: IPostReply, i: number) => 
                 <ReplyCard 
                     key={i}
                     reply={reply}
+                    postId={id}
                 />
             )}
             </List>

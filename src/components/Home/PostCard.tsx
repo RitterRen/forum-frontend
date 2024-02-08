@@ -1,32 +1,42 @@
-import { Card, CardActionArea, CardHeader, IconButton } from '@mui/material'
-import { useAppSelector } from '../../store/hooks';
-import { selectPostById } from '../../store/selectors/post.selector';
+import { ButtonGroup, Card, CardActionArea, CardHeader, IconButton } from '@mui/material'
+import { useAppSelector, useThunkDispatch } from '../../store/hooks';
 import PeopleIcon from '@mui/icons-material/People';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { selectUser } from '../../store/selectors/user.selector';
+import MenuButtons from './MenuButtons';
+import { ROLE_ADMIN, ROLE_SUPER } from '../../constants';
+import { selectPostById } from '../../store/selectors/post.selector';
 
 
 interface IProps {
-    id: string
+    id: string,
+    type: string
 }
 
 
 
 const PostCard = (props: IProps) => {
+    const user = useAppSelector(selectUser);
+    const isAdmin = user.role === ROLE_ADMIN || user.role === ROLE_SUPER;
     const post = useAppSelector(selectPostById(props.id));
+    const navigate = useNavigate(); 
+  
+
     return (
         <Card sx={{ width: '100%', margin: 1 }}>
-            <CardActionArea component={RouterLink} to={`/post/${props.id}`}>
+            <CardActionArea onClick={() => navigate(`/post/${props.id}`)} >
             <CardHeader
-                title={post.user.name}
+                title={`${post.user.firstName} ${post.user.lastName}`}
                 avatar={<PeopleIcon/>}
+                action={ isAdmin? <MenuButtons id={props.id} type={props.type}/>: null }
                 subheaderTypographyProps={{fontSize: 12, align: 'left'}}
                 subheader={post.dateCreated}
             />
             <CardHeader 
                 title={post.title} 
                 titleTypographyProps={{ variant:"h6" }}
-                secondaryAction={
+                secondaryaction={
                     <IconButton edge="end" aria-label="delete">
                         <DeleteIcon />
                     </IconButton>
