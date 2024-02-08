@@ -28,6 +28,13 @@ const postReducer: Reducer<IPostState, PostAction> = function (
             });
             return newState;
         }
+        
+        case LOAD_POST: {
+            let newState = { ...prevState };
+            let post = payload as PostPayload;
+            newState[post.postId] = post;
+            return newState;
+        }
 
         case UPDATE_POST: {
             let newState = { ...prevState };
