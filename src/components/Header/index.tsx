@@ -62,7 +62,7 @@ const headerList = [
   },
   {
     label: "Contact Us",
-    href: "/contactus",
+    href: "/contact",
   },
   {
     label: "Profile",
