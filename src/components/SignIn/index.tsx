@@ -14,12 +14,22 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import API, {STATUS} from '../../apiConfig';
+import { LoginPayload } from '../../types';
+import { useAppSelector, useThunkDispatch } from '../../store/hooks';
+import { loginUser } from '../../store/actions/user.action';
+import { selectRequest } from '../../store/selectors/user.selector';
+import { useNavigate } from 'react-router-dom';
+import { loadPosts } from '../../store/actions/post.action';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({
+  const dispatch = useThunkDispatch();
+  const request = useAppSelector(selectRequest);
+  const navigate = useNavigate();
+    
+  const [formData, setFormData] = useState<LoginPayload>({
     email: "",
     password: "",
   })
@@ -29,27 +39,35 @@ export default function SignIn() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      console.log(formData);
+    dispatch(loginUser(formData))
+    .then(() => {
+        if (request.success) {
+            navigate("/home");
+        } else {
+            window.alert(`Error: ${request.message}`);
+        }
+    });
+    // try {
+    //   console.log(formData);
       
-      const response = await fetch(API.login, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData),
-      });
+    //   const response = await fetch(API.login, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json"
+    //     },
+    //     body: JSON.stringify(formData),
+    //   });
 
-      const data = await response.json();
-      if (response.ok && data.code === STATUS.SUCCESS) {
-        localStorage.setItem("token", data.data);
-        window.alert("Login successfully !");
-      } else {
-        window.alert(`Error: ${data.message}`);
-      }
-    } catch (error: any) {
-      window.alert(`Error: ${error.toString()}`)
-    }
+    //   const data = await response.json();
+    //   if (response.ok && data.code === STATUS.SUCCESS) {
+    //     localStorage.setItem("token", data.data);
+    //     window.alert("Login successfully !");
+    //   } else {
+    //     window.alert(`Error: ${data.message}`);
+    //   }
+    // } catch (error: any) {
+    //   window.alert(`Error: ${error.toString()}`)
+    // }
   };
 
   return (

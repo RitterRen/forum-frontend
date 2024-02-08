@@ -10,6 +10,7 @@ import NewPost from './components/NewPost';
 import Copyright from './components/Copyright';
 import PostDetail from './components/PostDetail';
 import RefreshToken from './components/RefreshToken';
+import EditPost from './components/EditPost';
 import MessageManagement from './components/MessageManagement';
 import { UserProfile } from './components/UserDetail';
 
@@ -30,6 +31,7 @@ function App() {
           <Route path="/refreshToken" element={<RefreshToken />} />
           <Route path="/messageManagement" element={<MessageManagement/>}/>
           <Route path="/user" element={<UserProfile />} />
+          <Route path="/edit/:id" element={<EditPost />} />
         </Routes>
 
           <Copyright sx={{ mt: 5 }} />
